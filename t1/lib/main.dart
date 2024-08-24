@@ -1,71 +1,60 @@
 import 'package:flutter/material.dart';
 
-//void main() {
-//  runApp(const MyApp());
-//}
+/// Flutter code sample for [FloatingActionButton].
 
 void main() {
-runApp(MaterialApp(title: 'Navigation Basics',
-    home: FirstRoute() ));
-}
-class MyApp extends StatelessWidget {
-	const MyApp();
-	Widget build(BuildContext context) {
-	return MaterialApp(
-	home: Scaffold(
-	body: Center(
-	child: Text("Flutter t1 applications!",
-     style: TextStyle(color: Color.fromARGB(200, 30, 120, 45)),),
-	),
-    ),
-  );
-}
+  runApp(const FloatingActionButtonExampleApp());
 }
 
-class FirstRoute extends StatelessWidget {
-  const FirstRoute({super.key});
+class FloatingActionButtonExampleApp extends StatelessWidget {
+  const FloatingActionButtonExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('First Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Open route'),
-          onPressed: () {
-            // Navigate to second route when tapped.
-            Navigator.push(
-              context,
-                MaterialPageRoute(builder: (context) => const SecondRoute()),
-              );
-          },
-        ),
-      ),
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
+      home: const FloatingActionButtonExample(),
     );
   }
 }
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key});
+class FloatingActionButtonExample extends StatefulWidget {
+  const FloatingActionButtonExample({super.key});
+
+  @override
+  State<FloatingActionButtonExample> createState() =>
+      _FloatingActionButtonExampleState();
+}
+
+class _FloatingActionButtonExampleState
+    extends State<FloatingActionButtonExample> {
+  // The FAB's foregroundColor, backgroundColor, and shape
+  static const List<(Color?, Color? background, ShapeBorder?)> customizations =
+      <(Color?, Color?, ShapeBorder?)>[
+    (null, null, null), // The FAB uses its default for null parameters.
+    (null, Colors.green, null),
+    (Colors.white, Colors.green, null),
+    (Colors.white, Colors.green, CircleBorder()),
+  ];
+  int index = 0; // Selects the customization.
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Second Route'),
+        title: const Text('FloatingActionButton Sample'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('Go back!'),
-        ),
+      body: const Center(child: Text('Press the button below!')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            index = (index + 1) % customizations.length;
+          });
+        },
+        foregroundColor: customizations[index].$1,
+        backgroundColor: customizations[index].$2,
+        shape: customizations[index].$3,
+        child: const Icon(Icons.navigation),
       ),
     );
   }
